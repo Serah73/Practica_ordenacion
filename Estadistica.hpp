@@ -70,6 +70,7 @@ void Estadistica_t<T>::estadisticas(int elementos, int pruebas)
 			DNI aux(x, 65 + (x % 23) );
 			v[j] = aux;
 	    }
+	    ordena_.resetC();
 		acumulador = ordena_.Insert(v, 0);
 
 		calculadora_.minimo(acumulador);
@@ -92,7 +93,9 @@ void Estadistica_t<T>::estadisticas(int elementos, int pruebas)
 			DNI aux(x, 65 + (x % 23) );
 			v[j] = aux;
 		}
+		ordena_.resetC();
 		acumulador = ordena_.Burbuja(v, 0);
+		
 		calculadora_.minimo(acumulador);
 		calculadora_.maximo(acumulador);
 		calculadora_.mediaSumador(acumulador);
@@ -113,6 +116,7 @@ void Estadistica_t<T>::estadisticas(int elementos, int pruebas)
 			DNI aux(x, 65 + (x % 23) );
 			v[j] = aux;
 		}
+		ordena_.resetC();
 		acumulador = ordena_.QuickSort(v, 0, v.size() - 1, 0);
 
 		calculadora_.minimo(acumulador);
@@ -138,6 +142,7 @@ void Estadistica_t<T>::estadisticas(int elementos, int pruebas)
 		calculadora_.maximo(acumulador);
 		calculadora_.mediaSumador(acumulador);
 	}
+	ordena_.resetC();
 	calculadora_.mediaMath(pruebas);
 
 	std::cout << std::setw(12) << "HeapSort:" << std::setw(10) << calculadora_.get_min() << std::setw(10) << calculadora_.get_media() << std::setw(10) << calculadora_.get_max() << std::endl;
@@ -151,6 +156,7 @@ void Estadistica_t<T>::estadisticas(int elementos, int pruebas)
 			DNI aux(x, 65 + (x % 23) );
 			v[j] = aux;
 		}
+		ordena_.resetC();
 		acumulador = ordena_.ShellSort(v, alfa, 0);
 
 		calculadora_.minimo(acumulador);

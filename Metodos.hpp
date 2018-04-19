@@ -19,7 +19,7 @@ public:
 
 	//ordenaciones
 	int HeapSort(vector<T>& secuencia, int n, bool tipo);
-    int baja(vector<T>& secuencia, int n, int i);
+    void baja(vector<T>& secuencia, int n, int i);
     void swap(T x, T y);
 
     int Insert(vector<T>& secuencia, bool tipo);
@@ -28,6 +28,8 @@ public:
     int ShellSort(vector<T>& secuencia, float alfa, bool tipo);
     //otros
     void traza(int ini, int a, int b, vector<T>& secuencia);
+    
+    void resetC();
 };
 
 template <class T>
@@ -35,24 +37,24 @@ int Metodos_t<T>::HeapSort(vector<T>& secuencia, int n, bool tipo)
 {
     int acumulador = 0;
     for (int i = n / 2 - 1; i >= 0; i--)
-        acumulador += baja(secuencia, n, i);
-
+    {
+        baja(secuencia, n, i);
+    }
     for (int i=n-1; i>=0; i--)
     {
+        
         swap(secuencia[0], secuencia[i]);
-
-        acumulador += baja(secuencia, i, 0);
+        baja(secuencia, i, 0);
     }
-    return acumulador;
+    return calculadora_.get_contador();
 }
 
 template <class T>
-int Metodos_t<T>::baja(vector<T>& secuencia, int n, int i)
+void Metodos_t<T>::baja(vector<T>& secuencia, int n, int i)
 {
 	int largo = i;
 	int izquierda = 2*i + 1;
 	int derecha = 2*1 + 2;
-	int acumulador = 0;
 	
 	if(izquierda < n && secuencia[izquierda] > secuencia[largo])
 	        largo = izquierda;
@@ -63,10 +65,9 @@ int Metodos_t<T>::baja(vector<T>& secuencia, int n, int i)
 	if (largo != i)
 	{
 		swap(secuencia[i], secuencia[largo]);
-		acumulador ++;
+		calculadora_.shift();
 		baja(secuencia, n, largo);
 	}
-	return acumulador;
 }
 
 template <class T>
@@ -81,8 +82,6 @@ void Metodos_t<T>::swap(T x, T y)
 template <class T>
 int Metodos_t<T>::Insert(vector<T>& secuencia, bool tipo)
 {
-    int acumulador = 0;
-
     for(int i = 1; i < secuencia.size(); i++)
     {
     	int j = i;
@@ -95,19 +94,18 @@ int Metodos_t<T>::Insert(vector<T>& secuencia, bool tipo)
     	{
     		secuencia[j + 1] = secuencia[j];
     		j--;
-    		acumulador++;
+        	calculadora_.shift();
     	}
     	secuencia[j + 1] = x;
     	secuencia.erase(secuencia.begin());
     }
-    return acumulador;
+    return calculadora_.get_contador();
 }
 
 
 template <class T>
 int Metodos_t<T>::Burbuja(vector<T>& secuencia, bool tipo)
 {
-    int acumulador = 0;
     for(int i = 1; i < secuencia.size(); i++)
     {
     	for(int j = secuencia.size()-1; j >= i; j--)
@@ -116,19 +114,18 @@ int Metodos_t<T>::Burbuja(vector<T>& secuencia, bool tipo)
     		
     		if(secuencia[j] < secuencia[j-1])
     		{
-    			acumulador++;
+    			calculadora_.shift();
     			T x = secuencia[j-1];
     			secuencia[j] = x;
     		}
     	}
     }
-    return acumulador;
+    return calculadora_.get_contador();
 }
 
 template <class T>
 int Metodos_t<T>::QuickSort(vector<T>& secuencia, int inicial, int fin, bool tipo)
 {
-	int acumulador = 0;
 	int i = inicial;
 	int f = fin;
 	T p = secuencia[(i+f)/2];
@@ -138,7 +135,7 @@ int Metodos_t<T>::QuickSort(vector<T>& secuencia, int inicial, int fin, bool tip
 		while(secuencia[i] < p)	i++;
 		while(secuencia[f] > p)	f--;
 
-		acumulador++;
+		calculadora_.shift();
 		
 	    if(tipo)    traza(0, i, f, secuencia);
 
@@ -151,19 +148,23 @@ int Metodos_t<T>::QuickSort(vector<T>& secuencia, int inicial, int fin, bool tip
 		i++; f--;
 
 		if(inicial < f)
-			acumulador += QuickSort(secuencia, inicial, f, tipo);
-
+		{
+		    calculadora_.shift();
+			QuickSort(secuencia, inicial, f, tipo);
+		}
 		if(fin > i)
-			acumulador += QuickSort(secuencia, i, fin, tipo);
+		{
+		    calculadora_.shift();
+			QuickSort(secuencia, i, fin, tipo);
+		}
 
-		return acumulador;
+		return calculadora_.get_contador();
 	}
 }
 
 template <class T>
 int Metodos_t<T>::ShellSort(vector<T>& secuencia, float alfa, bool tipo)
 {
-    int acumulador = 0;
 	int gap, i, j;
     T temp;
 
@@ -175,7 +176,7 @@ int Metodos_t<T>::ShellSort(vector<T>& secuencia, float alfa, bool tipo)
 
     		for(j = i - gap; (j >= 0) && (secuencia[j] > secuencia[j+gap]); j -= gap)
     		{
-    			acumulador++;
+    			calculadora_.shift();
     			temp = secuencia[j];
     			secuencia[j] = secuencia[j + gap];
     			secuencia[j + gap] = temp;
@@ -183,7 +184,7 @@ int Metodos_t<T>::ShellSort(vector<T>& secuencia, float alfa, bool tipo)
 
     	}
     }
-    return acumulador;
+    return calculadora_.get_contador();
 }
 
 template <class T>
@@ -204,4 +205,10 @@ void Metodos_t<T>::traza(int ini, int a, int b, vector<T>& secuencia)
         }
     }
     std::cout << std::endl;
+}
+
+template <class T>
+void Metodos_t<T>::resetC()
+{
+    calculadora_.resetC();
 }

@@ -6,6 +6,7 @@ Datos_t::Datos_t()
     max_ = 0;
     media_ = 0;
     mediaSum_ = 0;
+    contador_ = 0;
 }
 
 Datos_t::~Datos_t(){}
@@ -25,14 +26,29 @@ float Datos_t::get_media(void) const
     return media_;
 }
 
-void Datos_t::minimo(int min)
+int Datos_t::get_contador() const
 {
-	if(min_ > min) min_ = min;
+    return contador_;    
 }
 
-void Datos_t::maximo(int max)
+void Datos_t::shift()
 {
-	if(max_ < max) max_ = max;
+    contador_++;
+}
+
+void Datos_t::resetC()
+{
+    contador_ = 0;
+}
+
+void Datos_t::minimo(int &min)
+{
+	if(min_ >= min) min_ = min;
+}
+
+void Datos_t::maximo(int &max)
+{
+	if(max_ <= max) max_ = max;
 }
 
 void Datos_t::mediaSumador(float media)
